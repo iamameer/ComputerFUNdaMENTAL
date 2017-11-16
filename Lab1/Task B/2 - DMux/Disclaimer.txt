@@ -1,0 +1,10 @@
+First of all, 
+I actually understand how multiplexer works. Abba Lawan explained the concept of multiplexer perfectly then stated the existence of demultiplexer and it's application in daily lives.
+
+But then I had a quite hard time understanding how the logic gates work, hence I did some research on the internet. This tutorial video helped me a lot in understanding how does it actually works.
+(by understanding how the logic gates work then I can construct the syntax of HDL programming)
+
+https://www.youtube.com/watch?v=DccmuatsHgU
+
+Regards,
+Ameer Sorne.
