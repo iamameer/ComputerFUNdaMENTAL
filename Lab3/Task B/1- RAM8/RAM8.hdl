@@ -1,0 +1,38 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/RAM8.hdl
+
+/**
+ * Memory of 8 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+
+CHIP RAM8 {
+    IN in[16], load, address[3];
+    OUT out[16];
+
+    PARTS:
+	
+	//assuming 8bit of data going to be transferred into RAM
+	//Hence we parsed all 8bits into individual bit via DeMux8 (one input 8 output)
+    DMux8Way(in=load,sel=address,a=outA,b=outB,c=outC,d=outD,e=outE,f=outF,g=outG,h=outH);
+    
+	//then all the individual bit went into respective Register
+	//while the IN pin is using the single input
+    Register(in=in,load=outA,out=bit1);
+    Register(in=in,load=outB,out=bit2);
+    Register(in=in,load=outC,out=bit3);
+    Register(in=in,load=outD,out=bit4);
+    Register(in=in,load=outE,out=bit5);
+    Register(in=in,load=outF,out=bit6);
+    Register(in=in,load=outG,out=bit7);
+    Register(in=in,load=outH,out=bit8);
+    
+	//re-assembling all 8bit into one single data again, using Mux8 (8input, one output)
+    Mux8Way16(a=bit1,b=bit2,c=bit3,d=bit4,e=bit5,f=bit6,g=bit7,h=bit8,sel=address,out=out);
+}
+
+/* But i still have a question why adress is created with 3 element size, but only using one single address. */

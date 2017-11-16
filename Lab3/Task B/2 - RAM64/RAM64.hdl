@@ -1,0 +1,36 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/RAM64.hdl
+
+/**
+ * Memory of 64 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+
+CHIP RAM64 {
+    IN in[16], load, address[6];
+    OUT out[16];
+
+    PARTS:
+	//assuming it can be derived from RAM8, as ram8 derived from register,
+	//assumed, 8data are 'divided' into 8 parts of each RAM64
+	//Division of data via Demultiplexer-with 8 output
+	//address 3~5 is used assuming those are the LSB part of the data
+	DMux8Way(in=load,sel=address[3..5],a=data1,b=data2,c=data3,d=data4,e=data5,f=data6,g=data7,h=data8);
+
+	//when the data 'entered' the ram, address of 0~2 is used in accordance of MSB part of the data
+    RAM8(in=in,load=data1,address=address[0..2],out=outdata1);
+	RAM8(in=in,load=data2,address=address[0..2],out=outdata2);
+	RAM8(in=in,load=data3,address=address[0..2],out=outdata3);
+	RAM8(in=in,load=data4,address=address[0..2],out=outdata4);
+	RAM8(in=in,load=data5,address=address[0..2],out=outdata5);  //these data are circulated
+	RAM8(in=in,load=data6,address=address[0..2],out=outdata6);
+	RAM8(in=in,load=data7,address=address[0..2],out=outdata7);
+	RAM8(in=in,load=data8,address=address[0..2],out=outdata8);
+	
+	//and merged again via Multiplexer of 8 input, resulting in 1 single output
+	Mux8Way16(a=outdata1,b=outdata2,c=outdata3,d=outdata4,e=outdata5,f=outdata6,g=outdata7,h=outdata8,sel=address[3..5],out=out);
+}
